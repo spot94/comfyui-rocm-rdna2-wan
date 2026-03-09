@@ -262,8 +262,8 @@ The `I2V WAN 2.2 14B SVI (KJ)` workflow uses nodes from KJ WanVideoWrapper to ge
 
 | Parameter                | Value | Description                                                                                           |
 | ------------------------ | ----- | ----------------------------------------------------------------------------------------------------- |
-| **High model/Low model** |       | Use a quantized Wan 2.2 I2V 14B GGUF model (Q4_K_M - Q6_K_M).                                         |
-| **T5 CLIP Encoder**      |       | Any T5 encoder, but **not** the scaled version!                                                        |
+| **High model/Low model** |  DaSiWa-WAN 2.2 I2V 14B SynthSeduction v9 Q4 | Use a quantized Wan 2.2 I2V 14B GGUF model (Q4_K_M - Q6_K_M).                                         |
+| **T5 CLIP Encoder**      | umt5-xxl-enc-fp8_e4m3fn | Any T5 encoder, but **not** the scaled version!                                                        |
 | **Swap blocks**          | 25-35 | The higher the value, the more RAM will be used during model loading to potentially reduce loading time/swapping. |
 
 ### 6.3 First Segment
