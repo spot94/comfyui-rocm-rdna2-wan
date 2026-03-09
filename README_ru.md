@@ -1,7 +1,7 @@
-## 📚 **ФИНАЛЬНАЯ ИНСТРУКЦИЯ: Идеальный стек для RDNA AMD GPUs (на примере RX 6700XT)**
+## 📚 **ФИНАЛЬНАЯ ИНСТРУКЦИЯ: Идеальный стек ComfyUI WAN 2.2 для RDNA2 AMD GPUs (на примере RX 6700XT)**
 *Март 2026*
 
-Эта инструкция создана на основе **реального боевого опыта** и гарантирует стабильную работу ComfyUI + WanVideo + SageAttention на **AMD RX 6700 XT** с **ROCm 7.1.1**.
+Эта инструкция создана на основе **реального боевого опыта** и гарантирует стабильную работу ComfyUI + WanVideo 2.2 + SageAttention на **AMD RX 6700 XT** с **ROCm 7.1.1**.
 
 ## **Предвартиельные требования**
 Данный стек был протестирован на следующей системе:
@@ -65,7 +65,6 @@ pip install --index-url https://download.pytorch.org/whl/rocm7.1 torch==2.10.0 t
 sed -i '/^torch\b/s/^/#/' requirements.txt
 sed -i '/^torchvision\b/s/^/#/' requirements.txt
 sed -i '/^torchaudio\b/s/^/#/' requirements.txt
-sed -i '/^torchsde\b/s/^/#/' requirements.txt
 
 ```
 Или отктройте в любом текстовом редакторе `requirements.txt` и закоментруйте строки:
@@ -73,7 +72,7 @@ sed -i '/^torchsde\b/s/^/#/' requirements.txt
 ...
 comfyui-embedded-docs
 #torch --> комментируем
-#torchsde --> комментируем
+torchsde --> не комментируем
 #torchvision --> комментируем
 #torchaudio --> комментируем
 numpy>=1.25.0
@@ -160,6 +159,74 @@ chmod +x run_comfyui.sh
 ```
 ./run_comfyui.sh
 ```
-Проверьте, что всё работает
+Проверьте, что всё работает: [http://127.0.0.1:8188/](http://127.0.0.1:8188/)
 
 ---
+## **Часть 5. Настройка ComfyUI под WAN 2.2 **
+### 5.1 Установка кастомных нод
+Перейдите в папку с кастомными нодами
+```
+cd ComfyUI/custom_nodes
+```
+Установите ComfyUI-Manager
+```
+git clone https://github.com/ltdrdata/ComfyUI-Manager.git
+```
+Установите AMD GPU Monitor
+```
+git clone https://github.com/iDAPPA/ComfyUI-AMDGPUMonitor.git
+```
+Запустите ComfyUI
+```
+cd ../..
+./run_comfyui.sh
+```
+Установите ноды для workflow через Manager
+
+- ComfyUI-WanVideoWrapper
+- rgthree's ComfyUI Nodes
+- ComfyUI Easy Use
+- KJNodes for ComfyUI
+- Crystools
+- ComfyUI-VideoHelperSuite
+- ComfyUI-mxToolkit
+- ComfyMath
+
+*Примчечание: При установке других нод не из списка, некоторые из них будут требовать numpy<2, или torch без ROCm. В таких случаях, нужно понизить версию numpy `pip install --upgrade "numpy<2"`, или заново установить torch для ROCm (п. 2.2)*
+
+### 5.2 Скачивание workflow для WAN 2.2
+Скачайте `I2V WAN 2.2 14B SVI (KJ).json` из репозитория в папку `ComfyUI/user/default/workflows` или просто перетащите файл в окно с открытым интерфейсом ComfyUI
+Если Вы сохранили файл в папку `ComfyUI/user/default/workflows`, workflow появится с списке рабочих процессов слева. Если же Вы перетащили файл в окно, не забудьте его сохранить (Ctrl+S)
+### 5.3 Скачивание моделей
+Откройте workflow, скачайте необходимые модели из списка справочной ноды
+
+## **Часть 6. Ключевые настройки workflow для 12GB**
+
+Workflow `I2V WAN 2.2 14B SVI (KJ)` использует ноды от KJ WanVideoWrapper для генерации длинных видео из изображения (I2V). Видео генерируется по сегментам указанной длины (слайдер Seconds), потом сегменты собриаются в общий видео-файл. Количество Extra Segments можно увеличивать
+
+### 6.1 Рекомендуемые стартовые переметры
+| Параметр | Значение |
+|----------|----------|
+| `Resize resolution (by short edge)` | `480` - размер изображение будет изменён под 480p (с делителем 32)|
+| `FPS` | `16` - количество кадров в секнду, лучше оставить на 16. Если захочется увеличить FPS, рекомендую использовать интерполяцию перед нодой VideoComine|
+| `Seconds per segment` | `3` - колчество секунд на сегмент, 3 генерируется достаточно быстро, 4 с натяжкой, 5 уже долго|
+
+### 6.2 Model loader & Prompt
+| Параметр | Значение |
+|----------|----------|
+| `High model\Low model` | Подойдёт Квантизированная Wan 2.2 I2V 14B GGUF модель (Q4_K_M - Q6_K_M) |
+| `T5 CLIP Encoder` | Любой T5 энкодер, но не scaled версия!|
+| `Swap blocks` | `25-35` (чем больше значение, тем больше ОЗУ будет задейстовано в загрузке моделей)|
+
+### 6.3 First segment
+| Параметр | Значение |
+|----------|----------|
+| `Enable RifleXRope x2` | `true` (будет использована интерполяция для более быстрой генерации кадров) |
+| `start_image_crop_positon` | `center` (если важный кусок изображения отрезается, поменяйте этот параметр) |
+
+### 6.4 Extra segment
+| Параметр | Значение |
+|----------|----------|
+| `Enable RifleXRope x2` | `true` (будет использована интерполяция для более быстрой генерации кадров) |
+| `overlap` | `5` - количество кадров для перекрытия между сегментами, обеспечивает плавность перехода между сегментами, но урезает общее количество кадров |
+
