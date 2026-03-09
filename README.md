@@ -2,7 +2,7 @@
 
 ## 📚 GUIDE: The Perfect ComfyUI WAN 2.2 Stack for RDNA2 AMD GPUs (using RX 6700XT as an example)
 
-March 2026
+*March 2026*
 
 This guide is based on real-world experience and guarantees stable operation of ComfyUI + WanVideo 2.2 + SageAttention on an AMD RX 6700 XT with ROCm 7.1.1.
 
