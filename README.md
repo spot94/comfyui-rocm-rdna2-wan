@@ -199,7 +199,7 @@ Install the workflow nodes via Manager:
 
 ### 5.2 Downloading the Workflow for WAN 2.2
 
-Download the `I2V WAN 2.2 14B SVI (KJ).json` file from the repository into the `ComfyUI/user/default/workflows` folder, or simply drag and drop the file into the ComfyUI browser window.
+Download the `I2V WAN 2.2 14B SVI (KJ Wrapper).json` file from the repository into the `ComfyUI/user/default/workflows` folder, or simply drag and drop the file into the ComfyUI browser window.
 
 If you saved the file to the `ComfyUI/user/default/workflows` folder, the workflow will appear in the workflow list on the left. If you dragged the file into the window, don't forget to save it (Ctrl+S).
 
