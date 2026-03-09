@@ -1,3 +1,5 @@
+[English](/README.md) | [Русский](/README_ru.md)
+
 ## 📚 **ФИНАЛЬНАЯ ИНСТРУКЦИЯ: Идеальный стек ComfyUI WAN 2.2 для RDNA2 AMD GPUs (на примере RX 6700XT)**
 *Март 2026*
 
