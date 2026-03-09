@@ -65,7 +65,6 @@ pip install --index-url https://download.pytorch.org/whl/rocm7.1 torch==2.10.0 t
 sed -i '/^torch\b/s/^/#/' requirements.txt
 sed -i '/^torchvision\b/s/^/#/' requirements.txt
 sed -i '/^torchaudio\b/s/^/#/' requirements.txt
-
 ```
 Или отктройте в любом текстовом редакторе `requirements.txt` и закоментруйте строки:
 ```
@@ -157,7 +156,7 @@ chmod +x run_comfyui.sh
 Проверьте, что всё работает: [http://127.0.0.1:8188/](http://127.0.0.1:8188/)
 
 ---
-## **Часть 5. Настройка ComfyUI под WAN 2.2 **
+## **Часть 5. Настройка ComfyUI под WAN 2.2**
 ### 5.1 Установка кастомных нод
 Перейдите в папку с кастомными нодами
 ```
@@ -209,7 +208,7 @@ Workflow `I2V WAN 2.2 14B SVI (KJ)` использует ноды от KJ WanVid
 ### 6.2 Model loader & Prompt
 | Параметр | Значение |
 |----------|----------|
-| `High model\Low model` | Подойдёт Квантизированная Wan 2.2 I2V 14B GGUF модель (Q4_K_M - Q6_K_M) |
+| `High model\Low model` | Подойдёт квантизированная Wan 2.2 I2V 14B GGUF модель (Q4_K_M - Q6_K_M) |
 | `T5 CLIP Encoder` | Любой T5 энкодер, но не scaled версия!|
 | `Swap blocks` | `25-35` (чем больше значение, тем больше ОЗУ будет задейстовано в загрузке моделей)|
 
