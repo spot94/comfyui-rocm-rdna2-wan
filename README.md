@@ -4,7 +4,7 @@
 
 *March 2026*
 
-This guide is based on real-world experience and guarantees stable operation of ComfyUI + WanVideo 2.2 + SageAttention on an AMD RX 6700 XT with ROCm 7.1.1.
+This guide is based on real-world experience and guarantees stable operation of ComfyUI + WanVideo 2.2 + SageAttention on an AMD RX 6700 XT (gfx1031) with ROCm 7.1.1.
 
 ## Prerequisites
 
